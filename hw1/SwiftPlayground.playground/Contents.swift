@@ -12,8 +12,16 @@ import XCTest
 /// - Parameter words: list of strings
 /// - Returns: true if every word in `words` is a palindrome, false otherwise
 func arePalindromes(_ words: [String]) -> Bool {
-    // your code here
-    return false
+    for word in words {
+        let characters = Array(word)
+        let size = characters.count
+        for i in 0...size/2 {
+            if (characters[i] != characters[size - i - 1]) {
+                return false
+            }
+        }
+    }
+    return true
 }
 //: ## Question 2: Optionals
 //: Someone stole a cookie from the GBC! At the crime scene, they found a blue book in the cookie jar with the SID `25346602` on it, no doubt it belonged to the criminal. The manager needs your help finding who it belongs to. Complete this function using the provided dictionary of SIDS called `studentIDNumbers` to find the culprit.
@@ -28,7 +36,14 @@ func arePalindromes(_ words: [String]) -> Bool {
 func findStudent(withStudentID sid: Int?, studentIDNumbers: [Int: String] = getSIDsDictionary()) -> String? {
     // studentIDNumbers has a default value (which is the SID dictionary), so you can use it directly like studentIDNumbers[50277282] -> "Tom"?.
     // Note: studentIDNumbers[KEY] always returns an optional since there may not be an entry for that KEY.
-    
+    if (sid == nil) {
+        return nil
+    }
+    for (id, name) in studentIDNumbers {
+        if (id == sid!) {
+            return name + " stole the cookie!"
+        }
+    }
     // your code here
     return nil
 }
@@ -39,7 +54,7 @@ findStudent(withStudentID: nil) // nil
 findStudent(withStudentID: 40979255) // nil
 //: ## Question 3: Protocols
 //: Make the class `Building` conform to the `Comparable` Protocol, and implement `getCapacity()`.
-class Building {
+class Building : Comparable{
     
     var name: String
     var capacity: Int?
@@ -51,8 +66,19 @@ class Building {
     
     //: Returns the `capacity` of the building. If the `capacity` is `nil`, then return `0`.
     func getCapacity() -> Int {
-        return -1 // your code here
+        if let unwrap = self.capacity {
+            return unwrap
+        }
+        return 0
     }
+    
+    static func < (one: Building, two: Building) -> Bool {
+        return one.name < two.name
+    }
+    static func == (one: Building, two: Building) -> Bool {
+        return one.name == two.name
+    }
+
 }
 
 let building = Building()
@@ -70,7 +96,7 @@ func percentageString(forNumber x: Double) -> String {
 }
 
 var percentageStringClosure = {
-    // your code here
+    (x : Double) -> String in return String(x*10) + "%"
 }
 //: Tests below (Ignore)
 class PlaygroundTests: XCTestCase {
@@ -104,5 +130,5 @@ class PlaygroundTests: XCTestCase {
     
 }
 //: ## Uncomment this line to run tests
-//PlaygroundTests.defaultTestSuite.run()
+PlaygroundTests.defaultTestSuite.run()
 
